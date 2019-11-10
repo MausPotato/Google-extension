@@ -1,0 +1,84 @@
+/* utils */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 15rem;
+  height: 20rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  letter-spacing: .05em;
+  background-color: white;
+}
+
+#job-list {
+  --main-color: #FF9100;
+  --sec-color: #7E7E7E;
+  --title-color: #FFFFFF;
+  --padding: 1rem;
+}
+
+/* header */
+#title {
+  display: flex;
+  align-items: center;
+  padding: var(--padding);
+  background-color: var(--main-color);
+}
+
+#title h2 {
+  color: var(--title-color);
+  font-size: 1.5rem;
+}
+
+#title svg {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: .5em;
+  fill: var(--title-color);
+}
+
+/* main */
+#content {
+  padding: var(--padding);
+}
+
+#content ul {
+  list-style: none;
+}
+
+#content li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--sec-color);
+  cursor: pointer;
+}
+
+#content li span {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#content li svg {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  margin-right: .5em;
+  fill: var(--sec-color);
+}
+
+#content li:hover > svg {
+  fill: var(--main-color);
+}
+
+#content li:hover > span {
+  color: var(--main-color);
+}

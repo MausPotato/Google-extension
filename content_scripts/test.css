@@ -1,0 +1,7 @@
+/*body:not(#_) {
+  background-color: darkorange;
+}*/
+.gj-add-btn {
+  margin-top: 12px;
+  background: url(chrome-extension://__MSG_@@extension_id__/images/maus_32.png) bottom right/contain no-repeat;
+}
