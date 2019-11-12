@@ -1,0 +1,23 @@
+{
+  "name": "google-extension",
+  "version": "1.0.0",
+  "description": "help me find a job",
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MausPotato/GoogleExtension.git"
+  },
+  "author": "Maus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MausPotato/GoogleExtension/issues"
+  },
+  "homepage": "https://github.com/MausPotato/GoogleExtension#readme",
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {}
+}

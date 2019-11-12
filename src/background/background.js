@@ -14,13 +14,23 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
-// 儲存content script抓取的資料
 let jobs = [];
+chrome.storage.sync.get("jobList", object => {
+  if (object.jobList != undefined) {
+    jobs.push(...object.jobList);
+  }
+});
+// 儲存content script抓取的資料
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {
-    console.log(message, sender);
-    jobs.push(message);
-    chrome.storage.sync.set({"list": jobs});
-    chrome.storage.sync.get("list", object => console.log(object));
+    if (message.action == "add") {
+      storeJobInfo(message.jobInfo);
+    } 
+    // chrome.storage.sync.get("list", object => console.log(object));
   }
 );
+
+function storeJobInfo(jobInfo) {
+  jobs.push(jobInfo);
+  chrome.storage.sync.set({"jobList": jobs});
+}

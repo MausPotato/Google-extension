@@ -4,18 +4,18 @@
   "description": "Get a better joooob!",
   "permissions": ["declarativeContent", "activeTab", "storage"],
   "background": {
-    "scripts":["background.js"],
+    "scripts":["./background/background.js"],
     "persistent": false
   },
   "content_scripts": [{
     "matches": ["https://*.104.com.tw/*"],
-    "css": ["./content_scripts/test.css"],
-    "js": ["./content_scripts/test.js"],
+    "css": ["./contentScripts/test.css"],
+    "js": ["./contentScripts/test.js"],
     "run_at": "document_end"
   }],
   "page_action": {
     "default_title": "Click me to get a better job!",
-    "default_popup": "popup.html",
+    "default_popup": "./popup/popup.html",
     "default_icon": {
       "32": "images/maus_32.png"
     }
