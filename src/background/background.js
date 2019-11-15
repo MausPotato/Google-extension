@@ -20,6 +20,7 @@ chrome.storage.sync.get("jobList", object => {
     jobs.push(...object.jobList);
   }
 });
+
 // 儲存content script抓取的資料
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {

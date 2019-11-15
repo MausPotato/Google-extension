@@ -1,23 +1,31 @@
-// createButton
-// parent.append(button)
-// button.onclick() > post.Message
-// event listener.. port > chrome.runtime.connect
-// bg.js > onConnect onMessage..
-// bg.js > chrome.storage..
-// content script..
-
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  console.log(changes, areaName);
-});
-
-function checkAllButtons() {
-  document.querySelectorAll("article.js-job-item").forEach((el) => {
-    if(!el.querySelector(".gj-btn")) {
-      let button = createButton(el);
-      setButtonAdd(button);
-      el.querySelector(".b-block__right").appendChild(button);
-    }
+window.onload = function() {
+  document.querySelectorAll("article.js-job-item").forEach((article) => {
+    attachButton(article);
   });
+  let newArticleObserver = new MutationObserver(newArticleHandler);
+  newArticleObserver.observe(document.querySelector("#js-job-content"), {childList: true});
+}
+
+function newArticleHandler(mutations) {
+  mutations.forEach((mutationRecord) => {
+    mutationRecord.addedNodes.forEach((node) => {
+      if (node.tagName == "ARTICLE") {
+        attachButton(node);
+      }
+    });
+  });
+}
+
+// chrome.storage.onChanged.addListener((changes, areaName) => {
+//   console.log(changes, areaName);
+// });
+
+function attachButton(article) {
+  if(!article.querySelector(".gj-btn")) {
+    let button = createButton(article);
+    setButtonAdd(button);
+    article.querySelector(".b-block__right").appendChild(button);
+  }
 }
 
 function createButton(article) {
@@ -40,7 +48,7 @@ function parseJobInfo(article) {
   jobInfo.jobId = article.getAttribute("data-job-no");
   jobInfo.name = article.getAttribute("data-job-name");
   let companyInfo = article.querySelector(".b-block__left > .b-list-inline > li > a").getAttribute("title");
-  jobInfo.company = companyInfo.substring(companyInfo.indexOf("公司名稱：") + 5, companyInfo.indexOf("公司住址："));
+  jobInfo.company = companyInfo.substring(companyInfo.indexOf("公司名：") + 4, companyInfo.indexOf("公司住址："));
   jobInfo.address = companyInfo.substring(companyInfo.indexOf("公司住址：") + 5);
   jobInfo.industry = article.getAttribute("data-indcat-desc");
   jobInfo.pay = article.querySelector(".b-block__left > .job-list-tag > span").innerText;
@@ -65,16 +73,4 @@ function setButtonAdd(button) {
 function setButtonRemove(button) {
   button.value = "remove";
   button.querySelector("span").innerText = "已儲存";
-}
-
-let lastURL = document.URL;
-window.addEventListener("mousewheel", function() {
-  if(lastURL != document.URL) {
-    checkAllButtons();
-    lastURL = document.URL;
-  }
-});
-
-window.onload = function() {
-  checkAllButtons();
 }
