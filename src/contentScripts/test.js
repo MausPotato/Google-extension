@@ -16,9 +16,9 @@ function newArticleHandler(mutations) {
   });
 }
 
-// chrome.storage.onChanged.addListener((changes, areaName) => {
-//   console.log(changes, areaName);
-// });
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  console.log(changes, areaName);
+});
 
 function attachButton(article) {
   if(!article.querySelector(".gj-btn")) {

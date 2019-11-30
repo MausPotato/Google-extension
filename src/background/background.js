@@ -1,7 +1,3 @@
-// receiver
-
-console.log("HERE!!");
-
 // popup.html清單出現網域
 chrome.runtime.onInstalled.addListener(function() {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
@@ -14,24 +10,48 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
-let jobs = [];
-chrome.storage.sync.get("jobList", object => {
-  if (object.jobList != undefined) {
-    jobs.push(...object.jobList);
+// 儲存content script抓取的資料
+let savedJobs = [];
+chrome.storage.sync.get("savedJobs", object => {
+  if (object.savedJobs != undefined) {
+    savedJobs = object.savedJobs;
   }
 });
 
-// 儲存content script抓取的資料
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {
-    if (message.action == "add") {
-      storeJobInfo(message.jobInfo);
-    } 
-    // chrome.storage.sync.get("list", object => console.log(object));
+    switch (message) {
+    }
   }
 );
 
-function storeJobInfo(jobInfo) {
-  jobs.push(jobInfo);
-  chrome.storage.sync.set({"jobList": jobs});
+function addFolder(name) {
+  if (hasFolder(name)) {
+    throw "資料夾同名是不允許的，念在你有創意，再想一個吧";
+  } else {
+    savedJobs.push({name: name});
+  }
+}
+
+function hasFolder(name) {
+  return savedJobs.some(folder => folder.name == name);
+}
+
+function removeFolder(folderIndex) {
+  if (folderIndex >= savedJobs.length) {
+    throw new RangeError("index out of range");
+  } else {
+    savedJobs.splice(folderIndex, 1);
+  }
+}
+
+function renameFolder(newName, folderIndex) {
+  if (folderIndex >= savedJobs.length) {
+    throw new RangeError("index out of range");
+  }
+  if (hasFolder(newName)) {
+    throw "資料夾同名是不允許的，念在你有創意，再想一個吧";
+  } else {
+    savedJobs[folderIndex].name = newName;
+  }
 }
