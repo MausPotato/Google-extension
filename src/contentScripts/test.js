@@ -1,3 +1,12 @@
+let gj = {
+  addJob: function(jobInfo, folderIndex) {
+    chrome.runtime.sendMessage({action: "addJob", jobInfo: jobInfo, folderIndex: folderIndex});
+  },
+  removeJob: function(jobId, folderIndex) {
+    chrome.runtime.sendMessage({action: "removeJob", jobId: jobId, folderIndex: folderIndex});
+  }
+}
+
 window.onload = function() {
   document.querySelectorAll("article.js-job-item").forEach((article) => {
     attachButton(article);
@@ -37,7 +46,11 @@ function createButton(article) {
   span.innerText = "";
   button.appendChild(span);
   button.addEventListener("click",() => {
-    chrome.runtime.sendMessage({action: button.value, jobInfo: button.jobInfo});
+    if (button.value == "add") {
+      gj.addJob(button.jobInfo, 0);
+    } else {
+      gj.removeJob(button.jobInfo.jobId, 0);
+    }
     toggleButton(button);
   });
   return button;

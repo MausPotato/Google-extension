@@ -12,18 +12,45 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // 儲存content script抓取的資料
 let savedJobs = [];
+addFolder("default");
 chrome.storage.sync.get("savedJobs", object => {
   if (object.savedJobs != undefined) {
     savedJobs = object.savedJobs;
   }
 });
 
+// message: {
+//   action: addJob/removeJob/addFolder/renameFolder/renameFolder,
+//   jobInfo: {job: id...etc},
+//   folderName: XXXXX,
+//   folderIndex: XXX,
+// }
+
 chrome.runtime.onMessage.addListener(
   function(message, sender, sendResponse) {
-    switch (message) {
+    switch (message.action) {
+      case "addJob":
+           addJob(message.jobInfo, message.folderIndex);
+      break;
+      case "removeJob":
+           removeJob(message.jobId, message.folderIndex);
+      break;
+      case "addFolder":
+           addFolder(message.folderName);
+      break;
+      case "removeFolder":
+           removeFolder(message.folderIndex);
+      break;
+      case "renameFolder":
+           renameFolder(message.folderName, message.folderIndex);
+      break;
     }
   }
 );
+
+function setInfo() {
+  chrome.storage.sync.set({savedJobs: savedJobs});
+}
 
 function hasJob(jobId) {
   return savedJobs.some(folder => {
@@ -45,13 +72,15 @@ function addJob(job, folderIndex) {
   } else {
     savedJobs[folderIndex].list.push(job);
   }
+  setInfo();
 }
 
 function removeJob(jobId, folderIndex) {
   if (folderIndex >= savedJobs.length) {
     throw new RangeError("index out of range");
   }
-  savedJobs[folderIndex].list.filter(job => job.jobId != jobId);
+  savedJobs[folderIndex].list = savedJobs[folderIndex].list.filter(job => job.jobId != jobId);
+  setInfo();
 }
 
 function hasFolder(name) {
@@ -64,6 +93,7 @@ function addFolder(name) {
   } else {
     savedJobs.push({name: name, list: []});
   }
+  setInfo();
 }
 
 function removeFolder(folderIndex) {
@@ -72,6 +102,7 @@ function removeFolder(folderIndex) {
   } else {
     savedJobs.splice(folderIndex, 1);
   }
+  setInfo();
 }
 
 function renameFolder(newName, folderIndex) {
@@ -83,4 +114,5 @@ function renameFolder(newName, folderIndex) {
   } else {
     savedJobs[folderIndex].name = newName;
   }
+  setInfo();
 }
