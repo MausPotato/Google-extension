@@ -25,16 +25,45 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
-function addFolder(name) {
-  if (hasFolder(name)) {
-    throw "資料夾同名是不允許的，念在你有創意，再想一個吧";
-  } else {
-    savedJobs.push({name: name});
+function hasJob(jobId) {
+  return savedJobs.some(folder => {
+    return folder.list.some(job => {
+      return job.jobId == jobId;
+    });
+  });
+}
+
+function addJob(job, folderIndex) {
+  if (folderIndex >= savedJobs.length) {
+    throw new RangeError("index out of range");
   }
+  if (hasJob(job.jobId)) {
+    throw "這工作已經存過了";
+  }
+  if (savedJobs[folderIndex].length >= 9) {
+    throw "這裡滿了";
+  } else {
+    savedJobs[folderIndex].list.push(job);
+  }
+}
+
+function removeJob(jobId, folderIndex) {
+  if (folderIndex >= savedJobs.length) {
+    throw new RangeError("index out of range");
+  }
+  savedJobs[folderIndex].list.filter(job => job.jobId != jobId);
 }
 
 function hasFolder(name) {
   return savedJobs.some(folder => folder.name == name);
+}
+
+function addFolder(name) {
+  if (hasFolder(name)) {
+    throw "資料夾同名是不允許的，念在你有創意，再想一個吧";
+  } else {
+    savedJobs.push({name: name, list: []});
+  }
 }
 
 function removeFolder(folderIndex) {
