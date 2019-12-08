@@ -2,11 +2,16 @@ let jobList = new Vue({
   el: "#job-list",
   created() {
     chrome.storage.sync.get("savedJobs", object => {
-      this.list = object.savedJobs;
+      this.savedJobs = object.savedJobs;
     });
   },
   data: {
-    list: {},
-  }
+    savedJobs: [],
+  },
+  methods: {
+    openList: function() {
+
+    }
+  },
 });
 
