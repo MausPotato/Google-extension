@@ -12,7 +12,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // 儲存content script抓取的資料
 let savedJobs = [];
-addFolder("default");
+addFolder("default1234567890987654321");
 addFolder("default2");
 chrome.storage.sync.get("savedJobs", object => {
   if (object.savedJobs != undefined) {

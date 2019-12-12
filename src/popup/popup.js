@@ -7,10 +7,15 @@ let jobList = new Vue({
   },
   data: {
     savedJobs: [],
+    visibility: close,
   },
   methods: {
     openList: function() {
-
+      if (this.visibility == "close") {
+        this.visibility = "open";
+      } else {
+        this.visibility = "close";
+      }
     }
   },
 });
